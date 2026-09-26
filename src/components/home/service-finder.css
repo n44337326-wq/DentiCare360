@@ -1,0 +1,220 @@
+/*
+ * "Find the right care" section: bento cards with a cursor spotlight, a morphing icon blob,
+ * a scroll-triggered staggered reveal and a sliding arrow. All motion is disabled for users
+ * who prefer reduced motion (block at the bottom).
+ */
+
+/* ---------- section decoration ---------- */
+@keyframes finder-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(50px, 30px, 0) scale(1.15);
+  }
+}
+@keyframes finder-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-40px, -30px, 0) scale(1.1);
+  }
+}
+.finder-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+}
+.finder-orb-a {
+  top: -6rem;
+  left: -6rem;
+  width: 22rem;
+  height: 22rem;
+  background: radial-gradient(circle, rgb(19 163 179 / 0.16), transparent 68%);
+  animation: finder-drift-a 16s ease-in-out infinite alternate;
+}
+.finder-orb-b {
+  bottom: -8rem;
+  right: -6rem;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, rgb(63 174 124 / 0.14), transparent 68%);
+  animation: finder-drift-b 20s ease-in-out infinite alternate;
+}
+.finder-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgb(11 37 69 / 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 10%, transparent 75%);
+}
+
+/* Little bar under the heading that draws itself when the section scrolls into view. */
+.finder-bar {
+  display: block;
+  height: 4px;
+  width: 4.5rem;
+  margin: 1rem auto 0;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #13a3b3, #3fae7c);
+  transform-origin: center;
+}
+
+/* ---------- scroll reveal (armed by JS so it degrades to "visible" without it) ---------- */
+.finder-grid[data-armed="true"]:not([data-in="true"]) .finder-reveal {
+  opacity: 0;
+  transform: translateY(34px) scale(0.96);
+}
+.finder-grid[data-armed="true"]:not([data-in="true"]) .finder-bar {
+  transform: scaleX(0);
+}
+.finder-reveal {
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0ms);
+}
+.finder-bar {
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
+}
+
+/* ---------- card ---------- */
+.finder-card {
+  --tone: 19 163 179;
+  position: relative;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+.finder-card[data-tone="green"] {
+  --tone: 63 174 124;
+}
+.finder-card[data-tone="blue"] {
+  --tone: 19 64 116;
+}
+/* Light that follows the cursor across the card. */
+.finder-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), rgb(var(--tone) / 0.16), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.finder-card:hover,
+.finder-card:focus-visible {
+  transform: translateY(-6px);
+  border-color: rgb(var(--tone) / 0.45);
+  box-shadow:
+    0 24px 48px -20px rgb(var(--tone) / 0.35),
+    0 6px 16px -8px rgb(11 37 69 / 0.15);
+}
+.finder-card:hover::before,
+.finder-card:focus-visible::before {
+  opacity: 1;
+}
+
+/* Icon with a slowly morphing blob behind it. */
+@keyframes finder-morph {
+  0%,
+  100% {
+    border-radius: 62% 38% 55% 45% / 55% 45% 55% 45%;
+    transform: rotate(0deg);
+  }
+  50% {
+    border-radius: 40% 60% 45% 55% / 45% 55% 45% 55%;
+    transform: rotate(90deg);
+  }
+}
+@keyframes finder-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+.finder-icon {
+  animation: finder-bob 5s ease-in-out infinite;
+}
+.finder-blob {
+  background: rgb(var(--tone) / 0.16);
+  animation: finder-morph 9s ease-in-out infinite;
+  transition: background-color 0.3s ease;
+}
+.finder-card:hover .finder-blob {
+  background: rgb(var(--tone) / 0.3);
+  animation-duration: 3.5s;
+}
+
+/* Big faded icon in the corner. */
+.finder-watermark {
+  position: absolute;
+  right: -1.25rem;
+  bottom: -1.5rem;
+  color: rgb(var(--tone) / 0.09);
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 0.35s ease;
+  pointer-events: none;
+}
+.finder-card:hover .finder-watermark {
+  transform: rotate(-10deg) scale(1.12);
+  color: rgb(var(--tone) / 0.16);
+}
+
+/* Round arrow button. */
+.finder-arrow {
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgb(var(--tone) / 0.35);
+  color: rgb(var(--tone));
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.finder-arrow svg {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.finder-card:hover .finder-arrow,
+.finder-card:focus-visible .finder-arrow {
+  background-color: rgb(var(--tone));
+  color: #fff;
+  transform: translateX(4px);
+}
+.finder-card:hover .finder-arrow svg,
+.finder-card:focus-visible .finder-arrow svg {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finder-orb,
+  .finder-icon,
+  .finder-blob {
+    animation: none;
+  }
+  .finder-reveal,
+  .finder-bar,
+  .finder-card,
+  .finder-watermark,
+  .finder-arrow,
+  .finder-arrow svg {
+    transition: none;
+  }
+  .finder-card:hover,
+  .finder-card:focus-visible {
+    transform: none;
+  }
+}

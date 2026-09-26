@@ -1,0 +1,368 @@
+// DentiCare360 database schema (PostgreSQL).
+//
+// Local development runs against an embedded, Postgres-compatible server
+// (`npm run db:dev`, PGlite). Production points DATABASE_URL at any managed
+// Postgres (Neon, Supabase, RDS, ...) — no code changes required.
+//
+// Calendar dates are stored as "YYYY-MM-DD" strings and times as "HH:mm"
+// strings in the clinic's timezone. That keeps availability maths free of
+// timezone/DST drift and makes lexical ordering equal chronological ordering.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum ConsultationType {
+  IN_PERSON
+  ONLINE
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum NotificationType {
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_REMINDER
+  APPOINTMENT_RESCHEDULED
+  APPOINTMENT_CANCELLED
+  DOCTOR_AVAILABILITY
+  GENERAL
+}
+
+enum MessageSender {
+  PATIENT
+  AI
+}
+
+enum UrgencyLevel {
+  LOW
+  MODERATE
+  HIGH
+  EMERGENCY
+}
+
+enum BlockKind {
+  HOLIDAY
+  LEAVE
+  BLOCKED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role     @default(PATIENT)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  patient       Patient?
+  doctor        Doctor?
+  notifications Notification[]
+  auditLogs     AuditLog[]
+
+  @@index([role])
+}
+
+model Patient {
+  id               String  @id @default(cuid())
+  userId           String  @unique
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateOfBirth      String?
+  gender           String?
+  emergencyContact String?
+
+  medicalProfile  MedicalProfile?
+  documents       MedicalDocument[]
+  appointments    Appointment[]
+  aiConversations AiConversation[]
+  payments        Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Specialty {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  icon        String?
+  doctors     Doctor[]
+  services    Service[]
+}
+
+model Doctor {
+  id                       String    @id @default(cuid())
+  userId                   String    @unique
+  user                     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialtyId              String
+  specialty                Specialty @relation(fields: [specialtyId], references: [id])
+  title                    String // the doctor's own focus line, e.g. "Orthodontics"
+  bio                      String    @db.Text
+  qualifications           String[]
+  areasOfExpertise         String[]
+  languages                String[]
+  experienceYears          Int       @default(0)
+  consultationFee          Decimal   @db.Decimal(10, 2)
+  rating                   Decimal   @default(0) @db.Decimal(3, 2)
+  reviewCount              Int       @default(0)
+  photoUrl                 String?
+  location                 String?
+  supportsOnline           Boolean   @default(true)
+  supportsInPerson         Boolean   @default(true)
+  isTemporarilyUnavailable Boolean   @default(false)
+  autoConfirm              Boolean   @default(true) // false → new bookings wait for the doctor to accept
+  unavailableReason        String?
+  isActive                 Boolean   @default(true)
+
+  availability DoctorAvailability[]
+  blockedDates DoctorBlockedDate[]
+  appointments Appointment[]
+  slots        AppointmentSlot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([specialtyId])
+}
+
+model Service {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  category        String
+  description     String        @db.Text
+  durationMinutes Int
+  startingPrice   Decimal       @db.Decimal(10, 2)
+  specialistLabel String
+  isActive        Boolean       @default(true)
+  specialtyId     String
+  specialty       Specialty     @relation(fields: [specialtyId], references: [id])
+  appointments    Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([specialtyId])
+}
+
+// Recurring weekly working hours per doctor (one row per weekday).
+model DoctorAvailability {
+  id         String  @id @default(cuid())
+  doctorId   String
+  doctor     Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  dayOfWeek  Int // 0 = Sunday ... 6 = Saturday
+  startTime  String // "09:00"
+  endTime    String // "17:00"
+  breakStart String? // "13:00"
+  breakEnd   String? // "14:00"
+  isActive   Boolean @default(true)
+
+  @@unique([doctorId, dayOfWeek])
+}
+
+// One-off blocked dates: holidays, leave, or manually blocked days.
+model DoctorBlockedDate {
+  id       String    @id @default(cuid())
+  doctorId String
+  doctor   Doctor    @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  date     String // "YYYY-MM-DD"
+  kind     BlockKind @default(BLOCKED)
+  reason   String?
+
+  @@unique([doctorId, date])
+}
+
+// A claimed appointment slot. A row exists ONLY while a slot is taken, and the
+// unique constraint on (doctorId, date, startTime) is what makes double
+// booking impossible at the database level, even under concurrent requests.
+// Cancelling or moving an appointment deletes the row, freeing the slot.
+model AppointmentSlot {
+  id          String       @id @default(cuid())
+  doctorId    String
+  doctor      Doctor       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  date        String
+  startTime   String
+  endTime     String
+  appointment Appointment?
+
+  @@unique([doctorId, date, startTime])
+  @@index([doctorId, date])
+}
+
+model Appointment {
+  id               String            @id @default(cuid())
+  patientId        String
+  patient          Patient           @relation(fields: [patientId], references: [id])
+  doctorId         String
+  doctor           Doctor            @relation(fields: [doctorId], references: [id])
+  serviceId        String
+  service          Service           @relation(fields: [serviceId], references: [id])
+  slotId           String?           @unique
+  slot             AppointmentSlot?  @relation(fields: [slotId], references: [id], onDelete: SetNull)
+  date             String
+  startTime        String
+  endTime          String
+  consultationType ConsultationType  @default(IN_PERSON)
+  status           AppointmentStatus @default(CONFIRMED)
+  patientName      String
+  notes            String?           @db.Text
+  doctorNotes      String?           @db.Text
+  aiSummary        String?           @db.Text
+  meetingUrl       String?
+  reminderSentAt   DateTime?
+  aiConversationId String?
+  aiConversation   AiConversation?   @relation(fields: [aiConversationId], references: [id], onDelete: SetNull)
+
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId, date])
+  @@index([doctorId, date])
+  @@index([status])
+}
+
+model MedicalProfile {
+  id                    String   @id @default(cuid())
+  patientId             String   @unique
+  patient               Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  allergies             String[]
+  currentMedications    String[]
+  medicalHistory        String?  @db.Text
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  updatedAt             DateTime @updatedAt
+}
+
+model MedicalDocument {
+  id         String   @id @default(cuid())
+  patientId  String
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  fileName   String
+  storageKey String   @unique // opaque key inside private storage; never a public URL
+  mimeType   String
+  sizeBytes  Int
+  category   String // report | prescription | dental_record | other
+  uploadedAt DateTime @default(now())
+
+  @@index([patientId])
+}
+
+model AiConversation {
+  id             String       @id @default(cuid())
+  patientId      String? // null for guests
+  patient        Patient?     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  guestKeyHash   String? // sha256 of the secret a guest presents to resume a chat
+  status         String       @default("active")
+  stage          String       @default("new")
+  urgency        UrgencyLevel @default(LOW)
+  specialtySlug  String?
+  serviceSlug    String?
+  specialtyLabel String?
+  summary        String?      @db.Text
+  messages       AiMessage[]
+  appointments   Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model AiMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  conversation   AiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         MessageSender
+  content        String         @db.Text
+  createdAt      DateTime       @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, isRead])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  appointmentId String        @unique
+  appointment   Appointment   @relation(fields: [appointmentId], references: [id])
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id])
+  amount        Decimal       @db.Decimal(10, 2)
+  currency      String        @default("USD")
+  status        PaymentStatus @default(PENDING)
+  provider      String        @default("demo") // integration point: stripe | razorpay | demo
+  providerRef   String? // provider's opaque reference; raw card data is never stored
+  invoice       Invoice?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([status])
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  paymentId     String   @unique
+  payment       Payment  @relation(fields: [paymentId], references: [id])
+  invoiceNumber String   @unique
+  issuedAt      DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
