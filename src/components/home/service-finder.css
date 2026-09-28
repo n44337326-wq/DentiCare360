@@ -32,7 +32,7 @@
   left: -6rem;
   width: 22rem;
   height: 22rem;
-  background: radial-gradient(circle, rgb(19 163 179 / 0.16), transparent 68%);
+  background: radial-gradient(circle, rgb(34 211 238 / 0.12), transparent 68%);
   animation: finder-drift-a 16s ease-in-out infinite alternate;
 }
 .finder-orb-b {
@@ -40,7 +40,7 @@
   right: -6rem;
   width: 26rem;
   height: 26rem;
-  background: radial-gradient(circle, rgb(63 174 124 / 0.14), transparent 68%);
+  background: radial-gradient(circle, rgb(74 222 128 / 0.1), transparent 68%);
   animation: finder-drift-b 20s ease-in-out infinite alternate;
 }
 .finder-dots {
@@ -83,7 +83,7 @@
 
 /* ---------- professional content cards with colored headers ---------- */
 .finder-card {
-  --tone: 19 163 179;
+  --tone: 34 211 238;
   position: relative;
   background: #fff !important;
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
@@ -97,34 +97,34 @@
   overflow: hidden;
 }
 .finder-card-header {
-  background: linear-gradient(135deg, rgb(var(--tone) / 0.75), rgb(var(--tone) / 0.55)) !important;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.8), rgb(var(--tone) / 0.6)) !important;
   position: relative;
 }
 .finder-card-header::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 50%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 50%);
   pointer-events: none;
 }
-/* Unique gradient backgrounds for each card */
+/* Unique gradient backgrounds for each card - Lighter, more attractive */
 .finder-card:nth-child(1) {
-  background: linear-gradient(135deg, rgba(19, 163, 179, 0.08), rgba(19, 163, 179, 0.02)) !important;
+  background: linear-gradient(135deg, rgba(102, 220, 240, 0.12), rgba(102, 220, 240, 0.04)) !important;
 }
 .finder-card:nth-child(2) {
-  background: linear-gradient(135deg, rgba(63, 174, 124, 0.08), rgba(63, 174, 124, 0.02)) !important;
+  background: linear-gradient(135deg, rgba(152, 224, 180, 0.12), rgba(152, 224, 180, 0.04)) !important;
 }
 .finder-card:nth-child(3) {
-  background: linear-gradient(135deg, rgba(19, 64, 116, 0.08), rgba(19, 64, 116, 0.02)) !important;
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.12), rgba(147, 197, 253, 0.04)) !important;
 }
 .finder-card:nth-child(4) {
-  background: linear-gradient(135deg, rgba(19, 163, 179, 0.06), rgba(63, 174, 124, 0.04)) !important;
+  background: linear-gradient(135deg, rgba(165, 243, 252, 0.1), rgba(186, 230, 253, 0.05)) !important;
 }
 .finder-card:nth-child(5) {
-  background: linear-gradient(135deg, rgba(63, 174, 124, 0.06), rgba(19, 64, 116, 0.04)) !important;
+  background: linear-gradient(135deg, rgba(167, 243, 208, 0.1), rgba(177, 245, 220, 0.05)) !important;
 }
 .finder-card:nth-child(6) {
-  background: linear-gradient(135deg, rgba(19, 64, 116, 0.06), rgba(19, 163, 179, 0.04)) !important;
+  background: linear-gradient(135deg, rgba(191, 219, 254, 0.1), rgba(219, 234, 254, 0.05)) !important;
 }
 /* Gradient top section */
 .finder-card-gradient {
@@ -151,10 +151,10 @@
   pointer-events: none;
 }
 .finder-card[data-tone="green"] {
-  --tone: 63 174 124;
+  --tone: 74 222 128;
 }
 .finder-card[data-tone="blue"] {
-  --tone: 19 64 116;
+  --tone: 59 130 246;
 }
 .finder-card:hover,
 .finder-card:focus-visible {
@@ -239,13 +239,13 @@
 }
 .finder-avatar-circle {
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
-  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(25px);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.2),
-    inset 0 2px 16px rgba(255, 255, 255, 0.5),
-    inset 0 -2px 16px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.4);
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    inset 0 2px 14px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 14px rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   animation: finder-avatar-float 6s ease-in-out infinite;
 }
 .finder-avatar-emoji {
