@@ -62,12 +62,12 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
               data-tone={TONES[i % TONES.length]}
               className="finder-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             >
-              <div className="finder-card-header relative h-40 overflow-hidden transition-all duration-700">
+              <div className="finder-card-header relative h-32 overflow-hidden transition-all duration-700">
                 <div className="absolute inset-0 bg-gradient-to-br opacity-75 transition-all duration-700" />
-                <div className="relative z-10 flex h-full items-center justify-end pr-6">
-                  <div className="finder-avatar-badge relative flex h-32 w-32 items-center justify-center transition-all duration-700">
+                <div className="relative z-10 flex h-full items-center justify-end pr-4">
+                  <div className="finder-avatar-badge relative flex h-28 w-28 items-center justify-center transition-all duration-700">
                     <div className="finder-avatar-circle absolute inset-0 rounded-full" />
-                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-7xl leading-tight">
+                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-6xl leading-tight">
                       {s.slug === "dental" && "🦷"}
                       {s.slug === "dermatology" && "💄"}
                       {s.slug === "skin-face" && "✨"}
@@ -79,13 +79,13 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
                 </div>
               </div>
 
-              <div className="relative z-10 flex flex-1 flex-col justify-between bg-white p-6 transition-all duration-700">
+              <div className="relative z-10 flex flex-1 flex-col justify-between bg-white p-5 transition-all duration-700">
                 <div>
-                  <h3 className="text-2xl font-black text-navy leading-tight">{s.name}</h3>
-                  <p className="mt-3 text-sm text-navy/75 leading-relaxed">{s.text}</p>
+                  <h3 className="text-xl font-black text-navy leading-tight">{s.name}</h3>
+                  <p className="mt-2 text-xs text-navy/70 leading-relaxed">{s.text}</p>
                 </div>
 
-                <button className="finder-cta-btn mt-5 inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold text-white transition-all duration-700">
+                <button className="finder-cta-btn mt-4 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold text-white transition-all duration-700">
                   <span>View Doctors</span>
                   <ArrowRight className="h-4 w-4" />
                 </button>
