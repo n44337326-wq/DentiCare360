@@ -151,11 +151,14 @@
 }
 .finder-card:hover,
 .finder-card:focus-visible {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-12px) scale(1.04);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
 .finder-card:hover {
-  animation: finder-card-shine 0.6s ease-in-out;
+  animation: finder-card-hover 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.finder-card:hover .finder-cta-btn {
+  animation: finder-btn-pulse 0.6s ease-out;
 }
 
 /* Icon with a slowly morphing blob behind it. */
@@ -181,13 +184,22 @@
     transform: rotate(360deg) scale(1);
   }
 }
-@keyframes finder-bob {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
+@keyframes finder-subtle-glow {
+  0%, 100% {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-8px) scale(1.05);
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.15));
+    transform: scale(1.02);
+  }
+}
+@keyframes finder-scale-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
   }
 }
 @keyframes finder-glow-pulse {
@@ -221,15 +233,15 @@
 }
 /* 3D Avatar Badge Styling */
 .finder-avatar-badge {
-  animation: finder-bob 5s ease-in-out infinite;
+  animation: finder-subtle-glow 4s ease-in-out infinite;
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .finder-card:hover .finder-avatar-badge {
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2));
-  animation: finder-bob 3s ease-in-out infinite;
+  animation: finder-subtle-glow 2s ease-in-out infinite;
 }
 .finder-avatar-wrapper {
-  animation: finder-pulse 4s ease-in-out infinite;
+  animation: finder-scale-pulse 3s ease-in-out infinite;
 }
 .finder-avatar-circle {
   border-radius: 50%;
@@ -329,6 +341,28 @@
   }
   100% {
     background-position: 1000px 0;
+  }
+}
+@keyframes finder-card-hover {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.02);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+@keyframes finder-btn-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 .finder-card:hover .finder-avatar-circle {
