@@ -63,14 +63,11 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
               className="finder-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             >
               <div className="finder-card-header relative h-40 overflow-hidden transition-all duration-700">
-                <div className="absolute inset-0 bg-gradient-to-br opacity-90 transition-all duration-700" />
-                <span aria-hidden="true" className="absolute -right-6 -top-6 opacity-20 transition-all duration-700">
-                  <SpecialtyIcon name={s.icon} className="h-56 w-56" />
-                </span>
-                <div className="relative z-10 flex h-full items-center justify-center">
-                  <div className="finder-avatar-badge relative flex h-40 w-40 items-center justify-center transition-all duration-700">
+                <div className="absolute inset-0 bg-gradient-to-br opacity-75 transition-all duration-700" />
+                <div className="relative z-10 flex h-full items-center justify-end pr-6">
+                  <div className="finder-avatar-badge relative flex h-32 w-32 items-center justify-center transition-all duration-700">
                     <div className="finder-avatar-circle absolute inset-0 rounded-full" />
-                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-9xl leading-tight">
+                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-7xl leading-tight">
                       {s.slug === "dental" && "🦷"}
                       {s.slug === "dermatology" && "💄"}
                       {s.slug === "skin-face" && "✨"}

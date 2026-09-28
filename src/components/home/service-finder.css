@@ -93,7 +93,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 .finder-card-header {
-  background: linear-gradient(135deg, rgb(var(--tone)), rgb(var(--tone) / 0.8)) !important;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.7), rgb(var(--tone) / 0.5)) !important;
 }
 /* Unique gradient backgrounds for each card */
 .finder-card:nth-child(1) {
@@ -230,12 +230,12 @@
   animation: finder-avatar-float 6s ease-in-out infinite;
 }
 .finder-avatar-emoji {
-  font-size: 5rem;
+  font-size: 3.5rem;
   line-height: 1;
   text-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.15),
-    0 4px 8px rgba(0, 0, 0, 0.2);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   animation: finder-emoji-float 6s ease-in-out infinite;
   z-index: 20;
   position: relative;
