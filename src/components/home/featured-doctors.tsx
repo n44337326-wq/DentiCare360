@@ -26,18 +26,18 @@ export async function FeaturedDoctors() {
     : [];
 
   return (
-    <section aria-labelledby="featured-heading" className="bg-soft-blue py-16">
+    <section aria-labelledby="featured-heading" className="bg-gradient-to-br from-soft-blue via-white to-soft-blue/50 py-20">
       <div className="container-app">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="featured-heading" className="text-3xl font-semibold text-navy">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
+          <div className="animate-fade-in-up">
+            <h2 id="featured-heading" className="text-4xl font-black text-navy">
               Featured doctors
             </h2>
-            <p className="mt-2 text-navy/75">Highly rated specialists with appointments you can book today.</p>
+            <p className="mt-3 text-lg text-navy/70">Highly rated specialists with appointments you can book today.</p>
           </div>
-          <Button variant="outline" asChild className="bg-white">
-            <Link href="/doctors">
-              View all doctors <ArrowRight aria-hidden="true" />
+          <Button variant="outline" asChild className="bg-white transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <Link href="/doctors" className="flex items-center gap-2">
+              View all doctors <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
           </Button>
         </div>

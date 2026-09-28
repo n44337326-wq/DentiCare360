@@ -18,7 +18,9 @@
       "Bash(git commit -m 'New clean, professional card design with colored top bar *)",
       "Bash(git commit -m 'Fix avatar clipping and enhance card animations *)",
       "Bash(git commit -m 'Fix card cutting issue - increase space for animations *)",
-      "Bash(git commit -m 'Contain avatar animations within card + enhance card appeal *)"
+      "Bash(git commit -m 'Contain avatar animations within card + enhance card appeal *)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts|css\\)$\")",
+      "Bash(git commit -m 'Enhance Featured Doctors section with professional styling and animations *)"
     ]
   }
 }

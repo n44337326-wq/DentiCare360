@@ -30,10 +30,12 @@ export function DoctorCard({
   return (
     <li className="animate-fade-in-up" style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}>
       <Card
-        className="flex h-full flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        className="group flex h-full flex-col p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:ring-1 hover:ring-cyan/20 bg-gradient-to-br from-white to-slate-50"
       >
         <div className="flex items-start gap-3">
-          <DoctorAvatar name={doctor.name} photoUrl={doctor.photoUrl} size="md" />
+          <div className="transition-transform duration-500 group-hover:scale-110">
+            <DoctorAvatar name={doctor.name} photoUrl={doctor.photoUrl} size="md" />
+          </div>
           <div className="min-w-0 flex-1">
             <h3 className="truncate font-semibold text-navy">
               {doctor.name}
@@ -104,12 +106,12 @@ export function DoctorCard({
         </p>
 
         <div className="mt-auto flex gap-2 pt-5">
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <Button variant="outline" size="sm" className="flex-1 transition-all duration-300 hover:shadow-md hover:scale-105" asChild>
             <Link href={`/doctors/${doctor.id}`} aria-label={`View profile of ${doctor.name}`}>
               View Profile
             </Link>
           </Button>
-          <Button size="sm" className="flex-1" asChild>
+          <Button size="sm" className="flex-1 transition-all duration-300 hover:shadow-lg hover:scale-105 bg-gradient-to-r hover:from-cyan/90 hover:to-blue/90" asChild>
             <Link href={`/appointments/book?doctor=${doctor.id}`} aria-label={`Book appointment with ${doctor.name}`}>
               Book Appointment
             </Link>
