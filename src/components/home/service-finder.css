@@ -81,14 +81,62 @@
   transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
 }
 
-/* ---------- card ---------- */
+/* ---------- professional content cards with colored headers ---------- */
 .finder-card {
   --tone: 19 163 179;
   position: relative;
+  background: #fff !important;
+  border: none !important;
   transition:
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+.finder-card-header {
+  background: linear-gradient(135deg, rgb(var(--tone)), rgb(var(--tone) / 0.8)) !important;
+}
+/* Unique gradient backgrounds for each card */
+.finder-card:nth-child(1) {
+  background: linear-gradient(135deg, rgba(19, 163, 179, 0.15), rgba(19, 163, 179, 0.05)) !important;
+}
+.finder-card:nth-child(2) {
+  background: linear-gradient(135deg, rgba(63, 174, 124, 0.15), rgba(63, 174, 124, 0.05)) !important;
+}
+.finder-card:nth-child(3) {
+  background: linear-gradient(135deg, rgba(19, 64, 116, 0.15), rgba(19, 64, 116, 0.05)) !important;
+}
+.finder-card:nth-child(4) {
+  background: linear-gradient(135deg, rgba(19, 163, 179, 0.12), rgba(63, 174, 124, 0.08)) !important;
+}
+.finder-card:nth-child(5) {
+  background: linear-gradient(135deg, rgba(63, 174, 124, 0.12), rgba(19, 64, 116, 0.08)) !important;
+}
+.finder-card:nth-child(6) {
+  background: linear-gradient(135deg, rgba(19, 64, 116, 0.12), rgba(19, 163, 179, 0.08)) !important;
+}
+/* Gradient top section */
+.finder-card-gradient {
+  background: linear-gradient(180deg, rgb(var(--tone) / 0.2), transparent) !important;
+}
+.finder-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(800px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--tone) / 0.15), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.finder-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
 }
 .finder-card[data-tone="green"] {
   --tone: 63 174 124;
@@ -96,107 +144,251 @@
 .finder-card[data-tone="blue"] {
   --tone: 19 64 116;
 }
-/* Light that follows the cursor across the card. */
-.finder-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), rgb(var(--tone) / 0.16), transparent 65%);
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
 .finder-card:hover,
 .finder-card:focus-visible {
-  transform: translateY(-6px);
-  border-color: rgb(var(--tone) / 0.45);
+  transform: translateY(-16px) scale(1.04);
   box-shadow:
-    0 24px 48px -20px rgb(var(--tone) / 0.35),
-    0 6px 16px -8px rgb(11 37 69 / 0.15);
-}
-.finder-card:hover::before,
-.finder-card:focus-visible::before {
-  opacity: 1;
+    0 20px 50px rgba(0, 0, 0, 0.18),
+    0 0 40px rgb(var(--tone) / 0.3);
 }
 
 /* Icon with a slowly morphing blob behind it. */
 @keyframes finder-morph {
-  0%,
-  100% {
-    border-radius: 62% 38% 55% 45% / 55% 45% 55% 45%;
-    transform: rotate(0deg);
+  0% {
+    border-radius: 58% 42% 48% 52% / 58% 48% 52% 42%;
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    border-radius: 42% 58% 52% 48% / 42% 52% 48% 58%;
+    transform: rotate(45deg) scale(1.1);
   }
   50% {
-    border-radius: 40% 60% 45% 55% / 45% 55% 45% 55%;
-    transform: rotate(90deg);
+    border-radius: 45% 55% 42% 58% / 48% 45% 55% 52%;
+    transform: rotate(90deg) scale(1.06);
+  }
+  75% {
+    border-radius: 52% 48% 58% 42% / 55% 48% 52% 45%;
+    transform: rotate(135deg) scale(1.08);
+  }
+  100% {
+    border-radius: 58% 42% 48% 52% / 58% 48% 52% 42%;
+    transform: rotate(360deg) scale(1);
   }
 }
 @keyframes finder-bob {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.05);
   }
 }
+@keyframes finder-glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgb(var(--tone) / 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgb(var(--tone) / 0.3));
+  }
+}
+@keyframes finder-shimmer {
+  0% {
+    background-position: 200% 200%;
+  }
+  100% {
+    background-position: -200% -200%;
+  }
+}
+.finder-icon-circle {
+  border-radius: 50%;
+  animation: finder-bob 5.5s ease-in-out infinite;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+.finder-icon-main {
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  animation: finder-bob 5.5s ease-in-out infinite;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+/* 3D Avatar Badge Styling */
+.finder-avatar-badge {
+  animation: finder-bob 5.5s ease-in-out infinite;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.finder-avatar-circle {
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.1));
+  backdrop-filter: blur(15px);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.3),
+    inset 0 2px 20px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 20px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: finder-avatar-float 6s ease-in-out infinite;
+}
+.finder-avatar-emoji {
+  font-size: 5rem;
+  line-height: 1;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+  animation: finder-emoji-float 6s ease-in-out infinite;
+  z-index: 20;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+@keyframes finder-emoji-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.08);
+  }
+}
+@keyframes finder-avatar-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+    filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.25));
+  }
+}
+@keyframes finder-emoji-spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+.finder-card:hover .finder-avatar-circle {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.4),
+    inset 0 2px 24px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 24px rgba(0, 0, 0, 0.15);
+}
+.finder-card:hover .finder-avatar-badge {
+  transform: scale(1.15);
+}
 .finder-icon {
-  animation: finder-bob 5s ease-in-out infinite;
+  animation: finder-bob 5.5s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
 }
 .finder-blob {
-  background: rgb(var(--tone) / 0.16);
-  animation: finder-morph 9s ease-in-out infinite;
-  transition: background-color 0.3s ease;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.25), rgb(var(--tone) / 0.15));
+  animation: finder-morph 13s ease-in-out infinite;
+  transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 12px 28px rgb(var(--tone) / 0.25);
 }
 .finder-card:hover .finder-blob {
-  background: rgb(var(--tone) / 0.3);
-  animation-duration: 3.5s;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.6), rgb(var(--tone) / 0.4));
+  animation-duration: 3s;
+  box-shadow: 0 16px 40px rgb(var(--tone) / 0.4);
 }
 
-/* Big faded icon in the corner. */
+/* Big faded icon in the corner for glassmorphism. */
+@keyframes finder-float {
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1) translateY(0) translateX(0);
+  }
+  50% {
+    transform: rotate(-15deg) scale(1.12) translateY(-15px) translateX(-10px);
+  }
+}
 .finder-watermark {
   position: absolute;
-  right: -1.25rem;
-  bottom: -1.5rem;
-  color: rgb(var(--tone) / 0.09);
+  right: -2rem;
+  bottom: -2.5rem;
+  color: rgb(var(--tone) / 0.1);
   transition:
-    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-    color 0.35s ease;
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.7s ease;
   pointer-events: none;
+  opacity: 0.6;
 }
 .finder-card:hover .finder-watermark {
-  transform: rotate(-10deg) scale(1.12);
-  color: rgb(var(--tone) / 0.16);
+  animation: finder-float 4s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  color: rgb(var(--tone) / 0.3);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.15));
+  opacity: 0.8;
 }
 
-/* Round arrow button. */
+/* CTA Button - Professional gradient */
+.finder-cta-btn {
+  background: linear-gradient(135deg, rgb(var(--tone)), rgb(var(--tone) / 0.85)) !important;
+  box-shadow: 0 8px 24px rgb(var(--tone) / 0.35) !important;
+  border: none !important;
+  cursor: pointer;
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.finder-cta-btn:hover,
+.finder-cta-btn:focus {
+  transform: scale(1.08) !important;
+  box-shadow: 0 12px 36px rgb(var(--tone) / 0.45) !important;
+}
+.finder-cta-btn svg {
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.finder-card:hover .finder-cta-btn svg,
+.finder-card:focus-visible .finder-cta-btn svg {
+  transform: translateX(4px);
+}
+
 .finder-arrow {
   display: inline-flex;
-  height: 2.25rem;
-  width: 2.25rem;
+  height: 2.8rem;
+  width: 2.8rem;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  border: 1px solid rgb(var(--tone) / 0.35);
+  border: 2px solid rgb(var(--tone) / 0.4);
   color: rgb(var(--tone));
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.7s ease,
+    box-shadow 0.7s ease;
+  position: relative;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.12), rgb(var(--tone) / 0.05));
 }
 .finder-arrow svg {
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 20px;
+  height: 20px;
 }
 .finder-card:hover .finder-arrow,
 .finder-card:focus-visible .finder-arrow {
-  background-color: rgb(var(--tone));
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.9), rgb(var(--tone) / 0.7));
   color: #fff;
-  transform: translateX(4px);
+  border-color: rgb(var(--tone));
+  transform: scale(1.15);
+  box-shadow:
+    0 12px 28px -6px rgb(var(--tone) / 0.5),
+    inset 0 1px 0 0 rgb(255 255 255 / 0.4);
 }
 .finder-card:hover .finder-arrow svg,
 .finder-card:focus-visible .finder-arrow svg {
-  transform: translateX(2px);
+  transform: rotate(45deg);
 }
 
 @media (prefers-reduced-motion: reduce) {

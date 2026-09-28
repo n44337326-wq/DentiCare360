@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(git add *)",
-      "Bash(git commit -m 'Initial commit: Full-stack DentiCare360 healthcare platform *)"
+      "Bash(git commit -m 'Initial commit: Full-stack DentiCare360 healthcare platform *)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "PowerShell(cmdkey /delete:git:https://github.com)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(xargs grep -l \"dental\\\\|dermatology\")",
+      "Bash(git commit -m 'Fix: Match avatar emojis to specialty.slug instead of specialty.id *)"
     ]
   }
 }
