@@ -54,7 +54,7 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
   return (
     <div ref={root} className="finder-grid">
       {header}
-      <ul onPointerMove={onPointerMove} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <ul onPointerMove={onPointerMove} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-2">
         {items.map((s, i) => (
           <li key={s.id} className="finder-reveal" style={{ "--d": `${150 + i * 90}ms` } as CSSProperties}>
             <Link
@@ -62,12 +62,12 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
               data-tone={TONES[i % TONES.length]}
               className="finder-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             >
-              <div className="finder-card-header relative h-32 overflow-hidden transition-all duration-700">
-                <div className="absolute inset-0 bg-gradient-to-br opacity-75 transition-all duration-700" />
-                <div className="relative z-10 flex h-full items-center justify-end pr-4">
-                  <div className="finder-avatar-badge relative flex h-28 w-28 items-center justify-center transition-all duration-700">
+              <div className="finder-card-header relative h-28 overflow-hidden transition-all duration-700">
+                <div className="absolute inset-0 bg-gradient-to-br opacity-80 transition-all duration-700" />
+                <div className="relative z-10 flex h-full items-center justify-end pr-3">
+                  <div className="finder-avatar-badge relative flex h-24 w-24 items-center justify-center transition-all duration-700">
                     <div className="finder-avatar-circle absolute inset-0 rounded-full" />
-                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-6xl leading-tight">
+                    <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-5xl leading-tight">
                       {s.slug === "dental" && "🦷"}
                       {s.slug === "dermatology" && "💄"}
                       {s.slug === "skin-face" && "✨"}
@@ -79,15 +79,15 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
                 </div>
               </div>
 
-              <div className="relative z-10 flex flex-1 flex-col justify-between bg-white p-5 transition-all duration-700">
+              <div className="relative z-10 flex flex-1 flex-col justify-between bg-white p-4 transition-all duration-700">
                 <div>
-                  <h3 className="text-xl font-black text-navy leading-tight">{s.name}</h3>
-                  <p className="mt-2 text-xs text-navy/70 leading-relaxed">{s.text}</p>
+                  <h3 className="text-lg font-black text-navy leading-tight">{s.name}</h3>
+                  <p className="mt-1.5 text-xs text-navy/65 leading-relaxed">{s.text}</p>
                 </div>
 
-                <button className="finder-cta-btn mt-4 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold text-white transition-all duration-700">
+                <button className="finder-cta-btn mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold text-white transition-all duration-500">
                   <span>View Doctors</span>
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </div>
             </Link>
