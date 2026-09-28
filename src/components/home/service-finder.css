@@ -222,11 +222,13 @@
 /* 3D Avatar Badge Styling */
 .finder-avatar-badge {
   animation: finder-bob 6s ease-in-out infinite;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .finder-card:hover .finder-avatar-badge {
-  transform: scale(1.1);
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.25));
+}
+.finder-avatar-wrapper {
+  animation: finder-pulse 3s ease-in-out infinite;
 }
 .finder-avatar-circle {
   border-radius: 50%;
@@ -302,6 +304,14 @@
     box-shadow: 0 0 0 0 rgba(var(--tone) / 0);
   }
 }
+@keyframes finder-pulse {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.05);
+  }
+}
 .finder-card:hover .finder-avatar-circle {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.15));
   box-shadow:
@@ -356,23 +366,24 @@
   opacity: 0.8;
 }
 
-/* CTA Button - Professional white button */
+/* CTA Button - Modern gradient button */
 .finder-cta-btn {
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
   color: rgb(var(--tone)) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  border: none !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 .finder-cta-btn:hover,
 .finder-cta-btn:focus {
   background: #fff !important;
-  transform: translateY(-3px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 8px 28px rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
 }
 .finder-cta-btn svg {
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
