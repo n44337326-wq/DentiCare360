@@ -81,31 +81,24 @@
   transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s;
 }
 
-/* ---------- professional content cards with colored headers ---------- */
+/* ---------- professional content cards with centered avatar design ---------- */
 .finder-card {
   --tone: 34 211 238;
   position: relative;
-  background: #fff !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  background: linear-gradient(135deg, rgb(var(--tone) / 0.9), rgb(var(--tone) / 0.7)) !important;
+  border: none !important;
   transition:
     transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.5s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(var(--tone) / 0);
-  border-radius: 20px;
+    filter 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 24px;
   overflow: hidden;
+  min-height: 400px;
+  display: flex;
 }
 .finder-card-header {
-  background: linear-gradient(135deg, rgb(var(--tone) / 0.8), rgb(var(--tone) / 0.6)) !important;
-  position: relative;
-}
-.finder-card-header::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 50%);
-  pointer-events: none;
+  display: none;
 }
 /* Unique gradient backgrounds for each card - Lighter, more attractive */
 .finder-card:nth-child(1) {
@@ -158,13 +151,11 @@
 }
 .finder-card:hover,
 .finder-card:focus-visible {
-  transform: translateY(-14px) scale(1.02);
+  transform: translateY(-12px) scale(1.02);
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.12),
-    0 0 20px rgb(var(--tone) / 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  filter: brightness(1.01);
-  border-color: rgba(var(--tone) / 0.2);
+    0 16px 40px rgba(0, 0, 0, 0.15),
+    0 0 30px rgb(var(--tone) / 0.3);
+  filter: brightness(1.08);
 }
 
 /* Icon with a slowly morphing blob behind it. */
@@ -365,31 +356,23 @@
   opacity: 0.8;
 }
 
-/* CTA Button - Professional gradient */
+/* CTA Button - Professional white button */
 .finder-cta-btn {
-  background: linear-gradient(135deg, rgb(var(--tone)), rgb(var(--tone) / 0.9)) !important;
-  box-shadow: 0 6px 16px rgb(var(--tone) / 0.3) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: rgb(var(--tone)) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   border: none !important;
   cursor: pointer;
-  transition:
-    all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
-}
-.finder-cta-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: translateX(-100%);
-}
-.finder-cta-btn:hover::before {
-  animation: finder-btn-shine 0.6s ease-in-out;
+  font-weight: 600;
 }
 .finder-cta-btn:hover,
 .finder-cta-btn:focus {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 28px rgb(var(--tone) / 0.4) !important;
+  background: #fff !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
 }
 .finder-cta-btn svg {
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
