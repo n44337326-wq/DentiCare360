@@ -16,7 +16,8 @@
       "Bash(git commit -m 'Complete card design redesign - Centered avatar layout *)",
       "Bash(git commit -m 'Complete card redesign - New modern, animated professional style *)",
       "Bash(git commit -m 'New clean, professional card design with colored top bar *)",
-      "Bash(git commit -m 'Fix avatar clipping and enhance card animations *)"
+      "Bash(git commit -m 'Fix avatar clipping and enhance card animations *)",
+      "Bash(git commit -m 'Fix card cutting issue - increase space for animations *)"
     ]
   }
 }
