@@ -27,9 +27,7 @@ export function initials(name: string) {
 }
 
 function tintFor(name: string) {
-  let hash = 0;
-  for (const ch of name) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  return TINTS[hash % TINTS.length];
+  return "bg-cyan text-white";
 }
 
 /** Doctor photo, or a monogram avatar when no photo is on file. The image (if any) is decorative: the name is always rendered nearby. */
