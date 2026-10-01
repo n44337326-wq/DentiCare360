@@ -13,24 +13,24 @@ export function HowItWorks({ tinted = false }: { tinted?: boolean }) {
         </div>
 
         <div className="mx-auto max-w-6xl">
-          <ol className="relative flex items-start justify-between gap-4">
-            <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-cyan via-cyan to-blue" style={{ top: "2rem", width: "calc(100% - 2rem)", left: "1rem" }} aria-hidden="true" />
-
+          <ol className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {HOW_IT_WORKS.map((step, i) => (
               <li
                 key={step.title}
-                className="animate-fade-in-up relative flex-1 text-center group"
+                className="animate-fade-in-up group"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
-                <div className="mb-6 flex justify-center">
-                  <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-xl font-black text-white shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-110">
-                    {i + 1}
+                {/* Step number and header */}
+                <div className="mb-6">
+                  <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan/20 to-blue/20 transition-all duration-300 group-hover:from-cyan/40 group-hover:to-blue/40 group-hover:scale-110">
+                    <span className="text-2xl font-black text-cyan">{i + 1}</span>
                   </div>
+                  <h3 className="text-xl font-black text-navy leading-tight">
+                    {step.title}
+                  </h3>
                 </div>
 
-                <h3 className="text-lg font-black text-navy leading-tight mb-3">
-                  {step.title}
-                </h3>
+                {/* Step description */}
                 <p className="text-sm text-navy/70 leading-relaxed">
                   {step.desc}
                 </p>
