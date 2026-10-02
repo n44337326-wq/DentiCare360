@@ -7,7 +7,7 @@ import type { Service, ServiceCategory } from "@/types";
 import { EmptyState, ErrorState } from "@/components/shared/states";
 import { Button } from "@/components/ui/button";
 import { CATEGORY_DETAILS, SERVICES_FAQS } from "@/content/site-content";
-import { Faq } from "@/components/content/faq";
+import { FaqTiles } from "@/components/content/faq-tiles";
 import { CategoryInfo } from "@/components/content/category-info";
 import { ServicesNav } from "@/components/content/services-nav";
 import { ServicesHero } from "@/components/content/services-hero";
@@ -107,7 +107,7 @@ export default async function ServicesPage() {
           </div>
 
           <div className="mt-16">
-            <Faq id="services-faq" items={SERVICES_FAQS} title="Before you book" description="Answers to common questions about our services and pricing." />
+            <FaqTiles id="services-faq" items={SERVICES_FAQS} title="Before you book" description="Answers to common questions about our services and pricing." />
           </div>
         </>
       )}
