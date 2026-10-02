@@ -1,0 +1,89 @@
+/* ---------- animated hero background ---------- */
+.hx-aurora {
+  position: absolute;
+  z-index: -1;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+}
+.hx-aurora-a {
+  top: -8rem;
+  left: -6rem;
+  height: 24rem;
+  width: 24rem;
+  background: rgba(20, 184, 196, 0.28);
+  animation: hx-drift-a 15s ease-in-out infinite;
+}
+.hx-aurora-b {
+  bottom: -10rem;
+  right: 10%;
+  height: 26rem;
+  width: 26rem;
+  background: rgba(99, 102, 241, 0.2);
+  animation: hx-drift-b 19s ease-in-out infinite;
+}
+.hx-aurora-c {
+  top: 20%;
+  right: -6rem;
+  height: 20rem;
+  width: 20rem;
+  background: rgba(74, 222, 128, 0.18);
+  animation: hx-drift-a 23s ease-in-out infinite reverse;
+}
+.hx-dot {
+  position: absolute;
+  z-index: -1;
+  height: 0.4rem;
+  width: 0.4rem;
+  border-radius: 9999px;
+  background: var(--color-cyan, #14b8c4);
+  opacity: 0;
+  pointer-events: none;
+  animation: hx-rise 9s ease-in infinite;
+}
+
+@keyframes hx-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(70px, 50px) scale(1.15); }
+}
+@keyframes hx-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-80px, -40px) scale(1.1); }
+}
+@keyframes hx-rise {
+  0% { transform: translateY(40px) scale(0.5); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-260px) scale(1.2); opacity: 0; }
+}
+@keyframes hx-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes hx-spin-slow {
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(270deg); }
+}
+@keyframes hx-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+/* rotating word under the heading */
+.sc-words {
+  display: inline-block;
+  height: 1.35em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.sc-words > span {
+  display: block;
+  animation: sc-words 9s cubic-bezier(0.7, 0, 0.2, 1) infinite;
+}
+.sc-words > span > span {
+  display: block;
+  height: 1.35em;
+}
+@keyframes sc-words {
+  0%, 26% { transform: translateY(0); }
+  33%, 59% { transform: translateY(-25%); }
+  66%, 92% { transform: translateY(-50%); }
+  100% { transform: translateY(-75%); }
+}

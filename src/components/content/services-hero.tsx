@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Stethoscope } from "lucide-react";
 import "./services.css";
+import "./services-scene.css";
+import { BookingMockup } from "./booking-mockup";
 
 function CountUp({ to }: { to: number }) {
   const [value, setValue] = useState(0);
@@ -26,13 +28,23 @@ function CountUp({ to }: { to: number }) {
   return <span className="svc-stat-num">{value}</span>;
 }
 
-const ORBIT = [
-  { label: "Dental", emoji: "🦷", style: { top: "0%", left: "50%" } },
-  { label: "Skin & Derma", emoji: "✨", style: { top: "75%", left: "93.3%" } },
-  { label: "General Health", emoji: "🩺", style: { top: "75%", left: "6.7%" } },
+const WORDS = ["Dental care", "Skin & Dermatology", "General Health", "Dental care"];
+
+const DOTS = [
+  { left: "8%", delay: "0s", top: "80%" },
+  { left: "22%", delay: "-3s", top: "88%" },
+  { left: "48%", delay: "-6s", top: "84%" },
+  { left: "70%", delay: "-2s", top: "90%" },
+  { left: "90%", delay: "-5s", top: "82%" },
 ];
 
-export function ServicesHero({ services, areas }: { services?: number; areas?: number }) {
+export function ServicesHero({
+  services,
+  areas,
+}: {
+  services?: number;
+  areas?: number;
+}) {
   const stats = [
     ...(services ? [{ value: services, suffix: "+", label: "Services" }] : []),
     ...(areas ? [{ value: areas, suffix: "", label: "Care areas" }] : []),
@@ -40,9 +52,17 @@ export function ServicesHero({ services, areas }: { services?: number; areas?: n
   ];
 
   return (
-    <header className="svc-hero mb-8 grid items-center gap-10 px-6 py-12 sm:px-12 lg:grid-cols-[1.15fr_1fr] lg:py-14">
+    <header
+      className={`svc-hero mb-8 grid items-center gap-12 px-6 py-12 sm:px-12 lg:grid-cols-[1.1fr_1fr] lg:py-16`}
+    >
       <span aria-hidden="true" className="svc-hero-bg" />
       <span aria-hidden="true" className="svc-hero-grid" />
+      <span aria-hidden="true" className="hx-aurora hx-aurora-a" />
+      <span aria-hidden="true" className="hx-aurora hx-aurora-b" />
+      <span aria-hidden="true" className="hx-aurora hx-aurora-c" />
+      {DOTS.map((d, i) => (
+        <span key={i} aria-hidden="true" className="hx-dot" style={{ left: d.left, top: d.top, animationDelay: d.delay }} />
+      ))}
 
       <div>
         <span className="animate-fade-in-up inline-flex items-center gap-2 rounded-full bg-cyan/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-cyan">
@@ -51,13 +71,23 @@ export function ServicesHero({ services, areas }: { services?: number; areas?: n
         <h1 className="animate-fade-in-up mt-4 text-4xl font-black leading-[1.1] text-navy sm:text-5xl lg:text-6xl" style={{ animationDelay: "80ms" }}>
           Our <span className="svc-title-grad">Services</span>
         </h1>
-        <span aria-hidden="true" className="svc-underline" />
-        <p className="animate-fade-in-up mt-5 max-w-xl text-lg leading-relaxed text-navy/75" style={{ animationDelay: "160ms" }}>
+        <p className="animate-fade-in-up mt-4 text-xl font-bold text-navy sm:text-2xl" style={{ animationDelay: "140ms" }}>
+          Expert specialists for{" "}
+          <span className="sc-words text-cyan" aria-hidden="true">
+            <span>
+              {WORDS.map((w, i) => (
+                <span key={i}>{w}</span>
+              ))}
+            </span>
+          </span>
+          <span className="sr-only">dental care, skin and dermatology, and general health</span>
+        </p>
+        <p className="animate-fade-in-up mt-4 max-w-xl text-lg leading-relaxed text-navy/75" style={{ animationDelay: "200ms" }}>
           Every service can be booked online with a suitable specialist. Prices are demo starting prices for
           illustration; the final fee depends on your consultation.
         </p>
 
-        <div className="animate-fade-in-up mt-7 flex flex-wrap gap-3" style={{ animationDelay: "240ms" }}>
+        <div className="animate-fade-in-up mt-7 flex flex-wrap gap-3" style={{ animationDelay: "260ms" }}>
           <Link
             href="/appointments/book"
             className="svc-cta inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan to-blue px-5 py-3 text-sm font-bold text-white shadow-lg shadow-cyan/30 hover:shadow-xl hover:shadow-cyan/40"
@@ -85,30 +115,7 @@ export function ServicesHero({ services, areas }: { services?: number; areas?: n
         </dl>
       </div>
 
-      <div aria-hidden="true" className="svc-orbit-wrap">
-        <span className="svc-ring svc-ring-1" />
-        <span className="svc-ring svc-ring-2" />
-        <span className="svc-ring svc-ring-3" />
-        <span className="svc-spark" style={{ top: "14%", left: "24%" }} />
-        <span className="svc-spark" style={{ top: "70%", left: "50%", animationDelay: "-1s" }} />
-        <span className="svc-spark" style={{ top: "30%", left: "88%", animationDelay: "-2s" }} />
-
-        <div className="svc-core">
-          <Stethoscope className="h-9 w-9" strokeWidth={1.75} />
-          <span className="mt-1 text-xs font-bold tracking-wide">360° care</span>
-        </div>
-
-        <div className="svc-orbit">
-          {ORBIT.map((o) => (
-            <span key={o.label} className="svc-orbit-slot" style={o.style}>
-              <span className="svc-orbit-item">
-                <span className="svc-orbit-emoji">{o.emoji}</span>
-                {o.label}
-              </span>
-            </span>
-          ))}
-        </div>
-      </div>
+      <BookingMockup />
     </header>
   );
 }

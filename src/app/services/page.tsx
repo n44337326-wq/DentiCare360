@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Clock, HeartPulse, Smile, Sparkles, Stethoscope, UserRound } from "lucide-react";
+import { ArrowRight, Clock, HeartPulse, Smile, Sparkles, Stethoscope, UserRound, type LucideIcon } from "lucide-react";
 import { listServices, listSpecialties } from "@/services/catalog";
 import { formatCurrency } from "@/lib/utils";
 import type { Service, ServiceCategory } from "@/types";
@@ -92,7 +92,14 @@ export default async function ServicesPage() {
                 <CategoryInfo detail={CATEGORY_DETAILS[g.category]} />
                 <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {g.items.map((s, i) => (
-                    <ServiceCard key={s.id} service={s} specialtyName={specialtyNames.get(s.specialtySlug)} index={i} />
+                    <ServiceCard
+                      key={s.id}
+                      service={s}
+                      specialtyName={specialtyNames.get(s.specialtySlug)}
+                      index={i}
+                      tone={g.id}
+                      Icon={g.id === "dental" ? Smile : g.id === "dermatology" ? Sparkles : HeartPulse}
+                    />
                   ))}
                 </ul>
               </section>
@@ -108,39 +115,56 @@ export default async function ServicesPage() {
   );
 }
 
-function ServiceCard({ service: s, specialtyName, index }: { service: Service; specialtyName?: string; index: number }) {
+function ServiceCard({
+  service: s,
+  specialtyName,
+  index,
+  tone,
+  Icon,
+}: {
+  service: Service;
+  specialtyName?: string;
+  index: number;
+  tone: string;
+  Icon: LucideIcon;
+}) {
   return (
-    <li
-      className="svc-card animate-fade-in-up flex flex-col rounded-xl border border-border bg-white p-5 shadow-sm"
-      style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-semibold text-navy">{s.name}</h3>
-        <p className="shrink-0 rounded-full bg-cyan-light px-2.5 py-0.5 text-xs font-semibold text-navy">
-          From {formatCurrency(s.startingPrice)}
+    <li className="svc-card animate-fade-in-up" data-tone={tone} style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}>
+      <span aria-hidden="true" className="svc-card-glow" />
+
+      <div className="relative flex items-start justify-between gap-3">
+        <span className="svc-card-icon">
+          <Icon className="h-5 w-5" strokeWidth={1.9} aria-hidden="true" />
+        </span>
+        <p className="svc-price">
+          <small>From</small>
+          <strong>{formatCurrency(s.startingPrice).replace(/\.00$/, "")}</strong>
         </p>
       </div>
-      <p className="mt-2 flex-1 text-sm text-navy/75">{s.description}</p>
-      <dl className="mt-4 space-y-1.5 text-sm text-navy/80">
-        <div className="flex items-center gap-2">
+
+      <h3 className="relative mt-4 text-lg font-black leading-tight text-navy">{s.name}</h3>
+      <p className="relative mt-1.5 flex-1 text-sm leading-relaxed text-navy/70">{s.description}</p>
+
+      <dl className="relative mt-4 flex flex-wrap gap-2">
+        <div className="svc-meta">
           <dt className="sr-only">Duration</dt>
-          <Clock className="h-4 w-4 text-cyan" aria-hidden="true" />
+          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
           <dd>{s.durationMinutes} min</dd>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="svc-meta">
           <dt className="sr-only">Suitable specialist</dt>
-          <UserRound className="h-4 w-4 text-cyan" aria-hidden="true" />
-          <dd>
-            {s.suitableSpecialist}
-            {specialtyName ? <span className="text-navy/65"> &middot; {specialtyName}</span> : null}
-          </dd>
+          <UserRound className="h-3.5 w-3.5" aria-hidden="true" />
+          <dd>{s.suitableSpecialist}</dd>
         </div>
       </dl>
-      <Button size="sm" asChild className="mt-5">
-        <Link href={`/appointments/book?service=${s.slug}`} aria-label={`Book appointment for ${s.name}`}>
-          Book appointment <ArrowRight aria-hidden="true" />
-        </Link>
-      </Button>
+      {specialtyName ? <p className="relative mt-2 text-xs text-navy/55">{specialtyName}</p> : null}
+
+      <Link href={`/appointments/book?service=${s.slug}`} aria-label={`Book appointment for ${s.name}`} className="svc-book relative mt-5">
+        <span>Book appointment</span>
+        <span className="svc-book-arrow">
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </span>
+      </Link>
     </li>
   );
 }
