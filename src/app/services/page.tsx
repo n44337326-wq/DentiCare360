@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Clock, Stethoscope, UserRound } from "lucide-react";
+import { ArrowRight, Clock, HeartPulse, Smile, Sparkles, Stethoscope, UserRound } from "lucide-react";
 import { listServices, listSpecialties } from "@/services/catalog";
 import { formatCurrency } from "@/lib/utils";
 import type { Service, ServiceCategory } from "@/types";
@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { CATEGORY_DETAILS, SERVICES_FAQS } from "@/content/site-content";
 import { Faq } from "@/components/content/faq";
 import { CategoryInfo } from "@/components/content/category-info";
+import { ServicesNav } from "@/components/content/services-nav";
+import { ServicesHero } from "@/components/content/services-hero";
+import "@/components/content/services.css";
 
 export const metadata: Metadata = {
   title: "Services — DentiCare360",
@@ -46,13 +49,7 @@ export default async function ServicesPage() {
 
   return (
     <div className="container-app py-12">
-      <header className="mb-8 max-w-2xl">
-        <h1 className="text-3xl font-semibold text-navy sm:text-4xl">Our Services</h1>
-        <p className="mt-3 text-navy/75">
-          Every service can be booked online with a suitable specialist. Prices are demo starting prices for
-          illustration; the final fee depends on your consultation.
-        </p>
-      </header>
+      <ServicesHero services={services?.length} areas={groups.length} />
 
       {!services ? (
         <ErrorState message="We couldn't load our services just now. Please refresh the page in a moment." />
@@ -69,32 +66,29 @@ export default async function ServicesPage() {
         />
       ) : (
         <>
-          <nav
-            aria-label="Service categories"
-            className="sticky top-16 z-30 -mx-5 mb-10 border-y border-border bg-white/95 px-5 py-3 backdrop-blur-sm"
-          >
-            <ul className="flex flex-wrap gap-2">
-              {groups.map((g) => (
-                <li key={g.id}>
-                  <a
-                    href={`#${g.id}`}
-                    className="inline-flex h-9 items-center rounded-full border border-border bg-white px-4 text-sm font-medium text-navy transition-colors hover:border-cyan hover:bg-cyan-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-                  >
-                    {g.label}
-                    <span className="ml-2 text-xs text-navy/65">{g.items.length}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <ServicesNav groups={groups.map((g) => ({ id: g.id, label: g.label, count: g.items.length }))} />
 
           <div className="flex flex-col gap-14">
             {groups.map((g) => (
               <section key={g.id} id={g.id} aria-labelledby={`${g.id}-heading`} className="scroll-mt-40">
-                <h2 id={`${g.id}-heading`} className="text-2xl font-semibold text-navy">
-                  {g.label}
-                </h2>
-                <p className="mt-1 text-navy/75">{g.blurb}</p>
+                <div className="svc-reveal flex items-center gap-4">
+                  <span className="svc-cat-badge">
+                    {g.id === "dental" ? (
+                      <Smile className="h-6 w-6" aria-hidden="true" />
+                    ) : g.id === "dermatology" ? (
+                      <Sparkles className="h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <HeartPulse className="h-6 w-6" aria-hidden="true" />
+                    )}
+                  </span>
+                  <div>
+                    <h2 id={`${g.id}-heading`} className="text-2xl font-black text-navy sm:text-3xl">
+                      {g.label}
+                    </h2>
+                    <p className="mt-0.5 text-navy/75">{g.blurb}</p>
+                  </div>
+                </div>
+                <span aria-hidden="true" className="svc-cat-line" />
                 <CategoryInfo detail={CATEGORY_DETAILS[g.category]} />
                 <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {g.items.map((s, i) => (
@@ -117,7 +111,7 @@ export default async function ServicesPage() {
 function ServiceCard({ service: s, specialtyName, index }: { service: Service; specialtyName?: string; index: number }) {
   return (
     <li
-      className="animate-fade-in-up flex flex-col rounded-xl border border-border bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+      className="svc-card animate-fade-in-up flex flex-col rounded-xl border border-border bg-white p-5 shadow-sm"
       style={{ animationDelay: `${Math.min(index, 8) * 50}ms` }}
     >
       <div className="flex items-start justify-between gap-3">

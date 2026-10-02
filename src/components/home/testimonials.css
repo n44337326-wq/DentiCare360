@@ -1,0 +1,91 @@
+.tm-slide {
+  animation: tm-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.tm-slide .tm-star {
+  animation: tm-star 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.tm-slide .tm-star:nth-child(1) { animation-delay: 0.15s; }
+.tm-slide .tm-star:nth-child(2) { animation-delay: 0.25s; }
+.tm-slide .tm-star:nth-child(3) { animation-delay: 0.35s; }
+.tm-slide .tm-star:nth-child(4) { animation-delay: 0.45s; }
+.tm-slide .tm-star:nth-child(5) { animation-delay: 0.55s; }
+
+.tm-mark {
+  position: absolute;
+  top: -2.75rem;
+  left: -0.5rem;
+  font-family: Georgia, serif;
+  font-size: 10rem;
+  line-height: 1;
+  font-weight: 900;
+  color: rgba(20, 184, 196, 0.2);
+  pointer-events: none;
+  user-select: none;
+}
+
+.tm-tab {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0 0.75rem 1.1rem;
+  text-align: left;
+  transition: opacity 0.3s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tm-tab:hover {
+  transform: translateX(6px);
+}
+.tm-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 9999px;
+  background: rgba(11, 36, 71, 0.12);
+  overflow: hidden;
+}
+.tm-fill {
+  display: block;
+  width: 100%;
+  height: 0;
+  background: var(--color-cyan, #14b8c4);
+}
+.tm-tab[data-active="true"] .tm-fill {
+  animation: tm-progress var(--tm-duration, 7000ms) linear forwards;
+}
+.tm-paused .tm-tab[data-active="true"] .tm-fill {
+  animation-play-state: paused;
+}
+
+.tm-avatar {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tm-tab:hover .tm-avatar {
+  transform: scale(1.1) rotate(-6deg);
+}
+
+.tm-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 9999px;
+  border: 2px dashed rgba(20, 184, 196, 0.7);
+  animation: tm-spin 12s linear infinite;
+}
+
+@keyframes tm-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes tm-star {
+  from { opacity: 0; transform: scale(0) rotate(-90deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes tm-progress {
+  from { height: 0; }
+  to { height: 100%; }
+}
+@keyframes tm-spin {
+  to { transform: rotate(360deg); }
+}

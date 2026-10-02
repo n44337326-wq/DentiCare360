@@ -1,8 +1,34 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { HOW_IT_WORKS } from "@/content/site-content";
 import { MessageCircle, Users, CheckCircle, Calendar } from "lucide-react";
+import "./how-it-works.css";
 
-/** Four-step explainer of the patient journey. */
+const ICONS = [MessageCircle, Users, CheckCircle, Calendar];
+
+/** Four-step explainer of the patient journey, revealed step by step as it scrolls into view. */
 export function HowItWorks({ tinted = false }: { tinted?: boolean }) {
+  const listRef = useRef<HTMLOListElement>(null);
+  const [visible, setVisible] = useState<boolean[]>(() => HOW_IT_WORKS.map(() => false));
+
+  useEffect(() => {
+    const items = Array.from(listRef.current?.children ?? []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = items.indexOf(entry.target);
+          setVisible((prev) => prev.map((v, i) => (i === index ? true : v)));
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.25 },
+    );
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section aria-labelledby="how-heading" className={tinted ? "bg-soft-blue py-20" : "py-20"}>
       <div className="container-app">
@@ -14,47 +40,32 @@ export function HowItWorks({ tinted = false }: { tinted?: boolean }) {
         </div>
 
         <div className="mx-auto max-w-5xl">
-          <ol className="space-y-8">
+          <ol ref={listRef} className="space-y-8">
             {HOW_IT_WORKS.map((step, i) => {
-              const icons = [MessageCircle, Users, CheckCircle, Calendar];
-              const Icon = icons[i];
-              const isEven = i % 2 === 0;
+              const Icon = ICONS[i];
               return (
                 <li
                   key={step.title}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${i * 100}ms` }}
+                  className="hiw-step flex items-start gap-8"
+                  data-visible={visible[i]}
+                  style={{ "--hiw-delay": "80ms" } as React.CSSProperties}
                 >
-                  <div className={`flex items-start gap-8 ${isEven ? "flex-row" : "flex-row-reverse"}`}>
-                    {/* Left: Icon and Number */}
-                    <div className="relative flex-shrink-0 pt-2">
-                      {/* Step number circle */}
-                      <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-2xl font-black text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl">
-                        {i + 1}
-                      </div>
-
-                      {/* Connecting line to next step */}
-                      {i < 3 && (
-                        <div className="absolute top-20 left-1/2 h-16 w-1 -translate-x-1/2 bg-gradient-to-b from-cyan to-transparent" />
-                      )}
+                  <div className="relative flex-shrink-0 pt-2">
+                    <div className="hiw-num relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan to-blue text-2xl font-black text-white shadow-lg">
+                      <span className="hiw-ring text-cyan" aria-hidden="true" />
+                      {i + 1}
                     </div>
+                    {i < HOW_IT_WORKS.length - 1 && <div className="hiw-line" aria-hidden="true" />}
+                  </div>
 
-                    {/* Right: Content */}
-                    <div className="flex-1 pt-1">
-                      <div className="flex items-start gap-4 mb-2">
-                        <div className="flex-shrink-0 rounded-lg bg-gradient-to-br from-cyan/15 to-blue/15 p-3 transition-all duration-300 hover:from-cyan/25 hover:to-blue/25">
-                          <Icon className="h-6 w-6 text-cyan" strokeWidth={2} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-black text-navy leading-tight">
-                            {step.title}
-                          </h3>
-                        </div>
+                  <div className="flex-1 pt-1">
+                    <div className="mb-2 flex items-start gap-4">
+                      <div className="hiw-icon flex-shrink-0 rounded-lg bg-gradient-to-br from-cyan/15 to-blue/15 p-3">
+                        <Icon className="h-6 w-6 text-cyan" strokeWidth={2} />
                       </div>
-                      <p className="text-sm text-navy/70 leading-relaxed pl-16">
-                        {step.desc}
-                      </p>
+                      <h3 className="hiw-title text-xl font-black leading-tight text-navy">{step.title}</h3>
                     </div>
+                    <p className="hiw-desc text-sm leading-relaxed text-navy/70">{step.desc}</p>
                   </div>
                 </li>
               );

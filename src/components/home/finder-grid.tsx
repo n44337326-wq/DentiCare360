@@ -54,13 +54,13 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
   return (
     <div ref={root} className="finder-grid">
       {header}
-      <ul onPointerMove={onPointerMove} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 px-2">
+      <ul onPointerMove={onPointerMove} className="mx-auto grid max-w-4xl gap-4 px-2 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((s, i) => (
-          <li key={s.id} className="finder-reveal" style={{ "--d": `${150 + i * 90}ms` } as CSSProperties}>
+          <li key={s.id} className="finder-reveal h-full" style={{ "--d": `${150 + i * 90}ms` } as CSSProperties}>
             <Link
               href={`/doctors?specialty=${s.slug}`}
               data-tone={TONES[i % TONES.length]}
-              className="finder-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              className="finder-card group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             >
               {/* Card Background - White with subtle shadow */}
               <div className="absolute inset-0 bg-white transition-all duration-500" />
@@ -69,10 +69,10 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
               <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-br transition-all duration-700 group-hover:h-28" />
 
               {/* Card Content */}
-              <div className="relative z-10 flex flex-col h-full pt-6 px-5 pb-5">
+              <div className="relative z-10 flex flex-col h-full w-full pt-4 px-4 pb-4">
                 {/* Avatar - Positioned on top bar */}
-                <div className="flex justify-center -mt-2 mb-4">
-                  <div className="finder-avatar-badge relative flex h-20 w-20 items-center justify-center transition-all duration-500 transform group-hover:scale-110">
+                <div className="flex justify-center mb-2">
+                  <div className="finder-avatar-badge relative flex h-16 w-16 items-center justify-center transition-all duration-500 transform group-hover:scale-110">
                     <div className="finder-avatar-circle absolute inset-0 rounded-full" />
                     <div className="finder-avatar-emoji relative z-20 flex items-center justify-center text-4xl leading-tight">
                       {s.slug === "dental" && "🦷"}
@@ -86,8 +86,8 @@ export function FinderGrid({ header, items }: { header: ReactNode; items: Finder
                 </div>
 
                 {/* Title & Description - Dark text on white */}
-                <div className="flex-1 text-center mb-4">
-                  <h3 className="text-lg font-black text-navy leading-tight mb-2">{s.name}</h3>
+                <div className="flex-1 text-center mb-3">
+                  <h3 className="text-base font-black text-navy leading-tight mb-1">{s.name}</h3>
                   <p className="text-xs text-navy/65 leading-relaxed">{s.text}</p>
                 </div>
 
