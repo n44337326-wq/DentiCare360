@@ -6,6 +6,7 @@ import { listSpecialties } from "@/services/catalog";
 import { DoctorCard, DoctorGrid } from "@/components/doctors/doctor-card";
 import { loadDoctorsWithAvailability } from "@/components/doctors/doctor-data";
 import { DoctorFilters } from "@/components/doctors/doctor-filters";
+import { DoctorsHero } from "@/components/doctors/doctors-hero";
 import {
   deriveFilterOptions,
   filterDoctors,
@@ -43,12 +44,21 @@ export default async function DoctorsPage({
 
   return (
     <div className="container-app py-12">
-      <header className="mb-8 max-w-2xl">
-        <h1 className="text-3xl font-semibold text-navy sm:text-4xl">Find a Doctor</h1>
-        <p className="mt-3 text-navy/75">
-          Browse verified specialists across dental, dermatology and general health, then book the time that suits you.
-        </p>
-      </header>
+      <DoctorsHero
+        specialtyCount={specialties.length}
+        doctors={(data?.doctors ?? []).map((d) => ({
+          id: d.id,
+          name: d.name,
+          specialtyName: d.specialtyName,
+          rating: d.rating,
+          reviewCount: d.reviewCount,
+          experienceYears: d.experienceYears,
+          photoUrl: d.photoUrl,
+          supportsOnline: d.supportsOnline,
+          supportsInPerson: d.supportsInPerson,
+          isTemporarilyUnavailable: d.isTemporarilyUnavailable,
+        }))}
+      />
 
       {!data ? (
         <ErrorState message="We couldn't load our doctors just now. Please refresh the page in a moment." />
@@ -73,6 +83,7 @@ function DoctorResults({
 
   return (
     <>
+      <span id="doctor-results" className="block scroll-mt-24" />
       <DoctorFilters
         specialties={specialties.map((s) => ({ value: s.slug, label: s.name }))}
         locations={locations}
@@ -100,9 +111,9 @@ function DoctorResults({
             }
           />
         ) : (
-          <DoctorGrid label="Doctors">
+          <DoctorGrid label="Doctors" list>
             {results.map((doctor, i) => (
-              <DoctorCard key={doctor.id} doctor={doctor} next={data.next.get(doctor.id) ?? null} index={i} />
+              <DoctorCard key={doctor.id} doctor={doctor} next={data.next.get(doctor.id) ?? null} index={i} variant="rich" />
             ))}
           </DoctorGrid>
         )}

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DoctorAvatar } from "@/components/shared/doctor-avatar";
+import { RichDoctorCard } from "./doctor-card-rich";
 
 export function nextSlotLabel(next: NextAvailable) {
   return `${formatShortDate(next.date)} · ${formatTime12(next.slot.startTime)}`;
@@ -17,11 +18,15 @@ export function DoctorCard({
   doctor,
   next,
   index = 0,
+  variant = "compact",
 }: {
   doctor: Doctor;
   next: NextAvailable | null;
   index?: number;
+  variant?: "compact" | "rich";
 }) {
+  if (variant === "rich") return <RichDoctorCard doctor={doctor} next={next} index={index} />;
+
   const unavailable = doctor.isTemporarilyUnavailable;
 
   return (
@@ -107,16 +112,23 @@ export function DoctorGrid({
   children,
   label,
   columns = 3,
+  list = false,
 }: {
   children: React.ReactNode;
   label: string;
   columns?: 3 | 4;
+  list?: boolean;
 }) {
+  if (list) {
+    return (
+      <ul aria-label={label} className="grid gap-5 lg:grid-cols-2">
+        {children}
+      </ul>
+    );
+  }
+
   return (
-    <ul
-      aria-label={label}
-      className={`grid gap-5 sm:grid-cols-2 ${columns === 4 ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}
-    >
+    <ul aria-label={label} className={`grid gap-5 sm:grid-cols-2 ${columns === 4 ? "xl:grid-cols-4" : "lg:grid-cols-3"}`}>
       {children}
     </ul>
   );
